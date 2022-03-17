@@ -85,4 +85,16 @@ public class Products implements Serializable {
     public void setTprice(String tprice) {
         this.tprice = tprice;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "name='" + name + '\'' +
+                ", img='" + img + '\'' +
+                ", qty='" + qty + '\'' +
+                ", units='" + units + '\'' +
+                ", price='" + price + '\'' +
+                ", tprice='" + tprice + '\'' +
+                '}';
+    }
 }

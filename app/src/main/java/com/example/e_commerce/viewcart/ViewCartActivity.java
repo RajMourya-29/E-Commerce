@@ -5,8 +5,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,7 +18,14 @@ import com.example.e_commerce.R;
 import com.example.e_commerce.roomdatabase.DatabaseClient;
 import com.example.e_commerce.roomdatabase.Products;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ViewCartActivity extends AppCompatActivity {
 
@@ -39,7 +49,52 @@ public class ViewCartActivity extends AppCompatActivity {
         getItems();
         getPrice();
         getQty();
+        addToExcel();
 
+
+    }
+
+    private void addToExcel() {
+
+
+
+        List<Products> scannedOutputList1 = new ArrayList<>();
+
+        scannedOutputList1 = DatabaseClient
+                .getInstance(getApplicationContext())
+                .getAppDatabase()
+                .taskDao()
+                .getAll();
+// Log.e("data",scannedOutputList1.toString());
+        //   db.deleteInputRecords();
+        //   scancount.setText("SCAN BARCODE : "+db.getInputCount());
+        File pathToExternalStorage = Environment.getExternalStorageDirectory();
+        File appDirectory = new File(pathToExternalStorage.getAbsolutePath() + "/QrScanner/Output" + "/");
+        if (!appDirectory.exists()) {
+            boolean mkdir = appDirectory.mkdirs();
+            if (mkdir){
+
+            }
+        }
+
+        try {
+
+            File file= new File(appDirectory, "Output "+new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date())+".txt");
+            PrintWriter printWriter = new PrintWriter(file);
+            printWriter.print("");
+            FileWriter writer = new FileWriter(file,true);
+            for(int i=0;i<scannedOutputList1.size();i++){
+                writer.write(scannedOutputList1.toString());
+            }
+            writer.flush();
+            writer.close();
+            Log.e("Log: ", "Success");
+            MediaScannerConnection.scanFile(ViewCartActivity.this, new String[]{file.toString()}, null, null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Log: ", "Failed");
+        }
     }
 
     private void getItems() {
