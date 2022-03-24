@@ -1,10 +1,13 @@
 package com.example.e_commerce.roomdatabase;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.stream.Stream;
 
 @Entity
 public class Products implements Serializable {
@@ -88,13 +91,12 @@ public class Products implements Serializable {
 
     @Override
     public String toString() {
-        return "{" +
-                "name='" + name + '\'' +
-                ", img='" + img + '\'' +
-                ", qty='" + qty + '\'' +
-                ", units='" + units + '\'' +
-                ", price='" + price + '\'' +
-                ", tprice='" + tprice + '\'' +
-                '}';
+        return  name   + "\t" +
+                img    + "\t" +
+                qty    + "\t" +
+                units  + "\t" +
+                price  + "\t" +
+                tprice + System.lineSeparator() ;
     }
+
 }
